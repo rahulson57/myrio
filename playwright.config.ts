@@ -23,7 +23,13 @@ export default defineConfig({
   },
   webServer: {
     command: 'next dev -p 4311',
-    url: 'http://localhost:4311',
+    // DEC-013: `url:` readiness only accepts 2xx/3xx responses, but until a
+    // page-owning slice lands a src/app/page.tsx, every route 404s through
+    // not-found.tsx — so a URL-based check never reports "ready" and the
+    // whole suite (tests/e2e/** and tests/a11y/**) times out before running.
+    // `port:` makes readiness a plain TCP-accept check instead, independent
+    // of what status code the app returns once it does.
+    port: 4311,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
