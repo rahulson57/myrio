@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "overrides": [
+    {
+      "files": ["src/components/**/*.{ts,tsx,js,jsx}"],
+      "rules": {
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+            "message": "Raw hex colors are forbidden in src/components/** (SPEC-009). Use a design token (var(--...)) from src/styles/tokens.css instead."
+          },
+          {
+            "selector": "TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}\\b/]",
+            "message": "Raw hex colors are forbidden in src/components/** (SPEC-009). Use a design token (var(--...)) from src/styles/tokens.css instead."
+          }
+        ]
+      }
+    }
+  ]
+}
