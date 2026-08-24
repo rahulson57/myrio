@@ -14,6 +14,14 @@
           {
             "selector": "TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}\\b/]",
             "message": "Raw hex colors are forbidden in src/components/** (SPEC-009). Use a design token (var(--...)) from src/styles/tokens.css instead."
+          },
+          {
+            "selector": "Property[key.name='fontSize'] > Literal[value=/^\\d+(\\.\\d+)?(px|rem|em)$/]",
+            "message": "Hard-coded font-size is forbidden in src/components/** (SPEC-009). Use a type-scale token (var(--fs-...)) from src/styles/tokens.css instead."
+          },
+          {
+            "selector": "Property[key.name='fontSize'] > TemplateLiteral > TemplateElement[value.raw=/\\d+(\\.\\d+)?(px|rem|em)/]",
+            "message": "Hard-coded font-size is forbidden in src/components/** (SPEC-009). Use a type-scale token (var(--fs-...)) from src/styles/tokens.css instead."
           }
         ]
       }
