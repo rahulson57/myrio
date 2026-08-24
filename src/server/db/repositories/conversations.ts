@@ -14,6 +14,16 @@ export function computePairKey(userA: string, userB: string): string {
   return `${a}:${b}`;
 }
 
+export interface GetOrCreateConversationOverrides {
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here). Only applied when a
+   * new conversation is actually created — a get-or-create hit ignores it. */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at` (SPEC-003
+   * determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
+}
+
 /**
  * Gets the 1:1 conversation between `userA` and `userB`, creating it (and
  * its two participant rows) if it doesn't exist yet, all in one
@@ -25,6 +35,7 @@ export function getOrCreateConversation(
   db: MyrioDatabase,
   userA: string,
   userB: string,
+  overrides?: GetOrCreateConversationOverrides,
 ): Conversation {
   if (userA === userB) {
     throw new Error('A conversation requires two distinct participants.');
@@ -41,10 +52,15 @@ export function getOrCreateConversation(
       return existing;
     }
 
-    const now = Date.now();
+    const now = overrides?.createdAt ?? Date.now();
     const conversation = tx
       .insert(conversations)
-      .values({ pairKey, createdAt: now, lastMessageAt: null })
+      .values({
+        ...(overrides?.id !== undefined ? { id: overrides.id } : {}),
+        pairKey,
+        createdAt: now,
+        lastMessageAt: null,
+      })
       .returning()
       .get();
 

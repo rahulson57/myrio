@@ -27,6 +27,13 @@ export interface CreateCommentInput {
   authorId: string;
   parentId?: string | null;
   bodyText: string;
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here; every other caller
+   * omits this and gets today's random-id behaviour, unchanged). */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at` (SPEC-003
+   * determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
 }
 
 /**
@@ -37,7 +44,7 @@ export interface CreateCommentInput {
  */
 export function createComment(db: MyrioDatabase, input: CreateCommentInput): Comment {
   return db.transaction((tx) => {
-    const now = Date.now();
+    const now = input.createdAt ?? Date.now();
 
     if (input.parentId) {
       const parent = tx.select().from(comments).where(eq(comments.id, input.parentId)).get();
@@ -52,6 +59,7 @@ export function createComment(db: MyrioDatabase, input: CreateCommentInput): Com
     const comment = tx
       .insert(comments)
       .values({
+        ...(input.id !== undefined ? { id: input.id } : {}),
         articleId: input.articleId,
         authorId: input.authorId,
         parentId: input.parentId ?? null,

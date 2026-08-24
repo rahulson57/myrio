@@ -12,6 +12,13 @@ export interface CreateUploadInput {
   width?: number | null;
   height?: number | null;
   kind: 'avatar' | 'cover' | 'article_image';
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here; every other caller
+   * omits this and gets today's random-id behaviour, unchanged). */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at` (SPEC-003
+   * determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
 }
 
 /**
@@ -24,6 +31,7 @@ export function createUpload(db: MyrioDatabase, input: CreateUploadInput): Uploa
   return db
     .insert(uploads)
     .values({
+      ...(input.id !== undefined ? { id: input.id } : {}),
       ownerId: input.ownerId,
       diskPath: input.diskPath,
       mime: input.mime,
@@ -31,7 +39,7 @@ export function createUpload(db: MyrioDatabase, input: CreateUploadInput): Uploa
       width: input.width ?? null,
       height: input.height ?? null,
       kind: input.kind,
-      createdAt: Date.now(),
+      createdAt: input.createdAt ?? Date.now(),
     })
     .returning()
     .get();

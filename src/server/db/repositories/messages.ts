@@ -4,6 +4,16 @@ import { conversations, messages } from '../schema';
 
 export type Message = typeof messages.$inferSelect;
 
+export interface SendMessageOverrides {
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here; every other caller
+   * omits this and gets today's random-id behaviour, unchanged). */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at` (SPEC-003
+   * determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
+}
+
 /**
  * Sends a message and bumps `conversations.last_message_at`, in one
  * transaction so the thread-list ordering column never lags a message that
@@ -14,12 +24,19 @@ export function sendMessage(
   conversationId: string,
   senderId: string,
   bodyText: string,
+  overrides?: SendMessageOverrides,
 ): Message {
   return db.transaction((tx) => {
-    const now = Date.now();
+    const now = overrides?.createdAt ?? Date.now();
     const message = tx
       .insert(messages)
-      .values({ conversationId, senderId, bodyText, createdAt: now })
+      .values({
+        ...(overrides?.id !== undefined ? { id: overrides.id } : {}),
+        conversationId,
+        senderId,
+        bodyText,
+        createdAt: now,
+      })
       .returning()
       .get();
 

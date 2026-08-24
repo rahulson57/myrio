@@ -6,6 +6,17 @@ export type Clap = typeof claps.$inferSelect;
 
 const MAX_CLAP_COUNT = 50;
 
+export interface AddClapOverrides {
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here). Only applied on the
+   * insert branch — a delta on an existing clap row ignores it. */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at`/`updated_at`
+   * (SPEC-003 determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
+  updatedAt?: number;
+}
+
 /**
  * Adds `delta` claps from `userId` on `articleId` (a user's claps on one
  * article are a single row whose `count` increments, capped at 50 — the
@@ -22,6 +33,7 @@ export function addClap(
   articleId: string,
   userId: string,
   delta: number,
+  overrides?: AddClapOverrides,
 ): Clap {
   if (delta <= 0) {
     throw new Error('Clap delta must be a positive integer.');
@@ -29,6 +41,8 @@ export function addClap(
 
   return db.transaction((tx) => {
     const now = Date.now();
+    const createdAt = overrides?.createdAt ?? now;
+    const updatedAt = overrides?.updatedAt ?? now;
     const existing = tx
       .select()
       .from(claps)
@@ -40,13 +54,20 @@ export function addClap(
     const clap = existing
       ? tx
           .update(claps)
-          .set({ count: nextCount, updatedAt: now })
+          .set({ count: nextCount, updatedAt })
           .where(eq(claps.id, existing.id))
           .returning()
           .get()
       : tx
           .insert(claps)
-          .values({ articleId, userId, count: nextCount, createdAt: now, updatedAt: now })
+          .values({
+            ...(overrides?.id !== undefined ? { id: overrides.id } : {}),
+            articleId,
+            userId,
+            count: nextCount,
+            createdAt,
+            updatedAt,
+          })
           .returning()
           .get();
 
@@ -57,7 +78,7 @@ export function addClap(
       .get();
 
     tx.update(articles)
-      .set({ clapTotal: totalRow?.total ?? nextCount, updatedAt: now })
+      .set({ clapTotal: totalRow?.total ?? nextCount, updatedAt })
       .where(eq(articles.id, articleId))
       .run();
 

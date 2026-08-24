@@ -28,6 +28,14 @@ export interface CreateArticleInput extends DerivedArticleFields {
   coverUploadId?: string | null;
   status: 'draft' | 'published';
   publishedAt?: number | null;
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here; every other caller
+   * omits this and gets today's random-id behaviour, unchanged). */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at`/`updated_at`
+   * (SPEC-003 determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
+  updatedAt?: number;
 }
 
 export function createArticle(db: MyrioDatabase, input: CreateArticleInput): Article {
@@ -35,6 +43,7 @@ export function createArticle(db: MyrioDatabase, input: CreateArticleInput): Art
   return db
     .insert(articles)
     .values({
+      ...(input.id !== undefined ? { id: input.id } : {}),
       authorId: input.authorId,
       slug: input.slug,
       title: input.title,
@@ -47,8 +56,8 @@ export function createArticle(db: MyrioDatabase, input: CreateArticleInput): Art
       coverUploadId: input.coverUploadId ?? null,
       status: input.status,
       publishedAt: input.publishedAt ?? null,
-      createdAt: now,
-      updatedAt: now,
+      createdAt: input.createdAt ?? now,
+      updatedAt: input.updatedAt ?? now,
     })
     .returning()
     .get();

@@ -12,6 +12,13 @@ export interface CreateNotificationInput {
   articleId?: string | null;
   commentId?: string | null;
   messageId?: string | null;
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here; every other caller
+   * omits this and gets today's random-id behaviour, unchanged). */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at` (SPEC-003
+   * determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
 }
 
 /**
@@ -32,13 +39,14 @@ export function createNotification(
   return db
     .insert(notifications)
     .values({
+      ...(input.id !== undefined ? { id: input.id } : {}),
       userId: input.userId,
       type: input.type,
       actorId: input.actorId,
       articleId: input.articleId ?? null,
       commentId: input.commentId ?? null,
       messageId: input.messageId ?? null,
-      createdAt: Date.now(),
+      createdAt: input.createdAt ?? Date.now(),
     })
     .returning()
     .get();

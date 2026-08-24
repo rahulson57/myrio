@@ -13,6 +13,14 @@ export interface CreateUserInput {
   socialTwitter?: string | null;
   socialGithub?: string | null;
   socialWebsite?: string | null;
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here; every other caller
+   * omits this and gets today's random-id behaviour, unchanged). */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at`/`updated_at`
+   * (SPEC-003 determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
+  updatedAt?: number;
 }
 
 /** Creates a user. Email/handle are normalized (trimmed, lowercased) here —
@@ -22,6 +30,7 @@ export function createUser(db: MyrioDatabase, input: CreateUserInput): User {
   return db
     .insert(users)
     .values({
+      ...(input.id !== undefined ? { id: input.id } : {}),
       email: input.email.trim().toLowerCase(),
       passwordHash: input.passwordHash,
       handle: input.handle.trim().toLowerCase(),
@@ -30,8 +39,8 @@ export function createUser(db: MyrioDatabase, input: CreateUserInput): User {
       socialTwitter: input.socialTwitter ?? null,
       socialGithub: input.socialGithub ?? null,
       socialWebsite: input.socialWebsite ?? null,
-      createdAt: now,
-      updatedAt: now,
+      createdAt: input.createdAt ?? now,
+      updatedAt: input.updatedAt ?? now,
     })
     .returning()
     .get();

@@ -15,8 +15,27 @@ function slugify(input: string): string {
     .slice(0, 30);
 }
 
-/** Get-or-create a tag by display name, in one transaction. */
-export function getOrCreateTag(db: MyrioDatabase, displayName: string): Tag {
+export interface CreateTagOverrides {
+  /** Overrides the default `$defaultFn`-generated id (SPEC-003: the seed
+   * pipeline supplies a deterministic UUIDv7 here; every other caller
+   * omits this and gets today's random-id behaviour, unchanged). Only
+   * applied when a new row is actually created — a get-or-create hit on an
+   * existing tag ignores it. */
+  id?: string;
+  /** Overrides the default `Date.now()` stamp on `created_at` (SPEC-003
+   * determinism). Omit for today's behaviour, unchanged. */
+  createdAt?: number;
+}
+
+/** Get-or-create a tag by display name, in one transaction. `overrides` is
+ * for the seed pipeline only — see `setArticleTags` below for why callers
+ * must pre-create every tag through this function first if they need
+ * deterministic ids. */
+export function getOrCreateTag(
+  db: MyrioDatabase,
+  displayName: string,
+  overrides?: CreateTagOverrides,
+): Tag {
   const slug = slugify(displayName);
 
   return db.transaction((tx) => {
@@ -26,7 +45,12 @@ export function getOrCreateTag(db: MyrioDatabase, displayName: string): Tag {
     }
     return tx
       .insert(tags)
-      .values({ slug, displayName: displayName.trim(), createdAt: Date.now() })
+      .values({
+        ...(overrides?.id !== undefined ? { id: overrides.id } : {}),
+        slug,
+        displayName: displayName.trim(),
+        createdAt: overrides?.createdAt ?? Date.now(),
+      })
       .returning()
       .get();
   });
@@ -36,6 +60,12 @@ export function getOrCreateTag(db: MyrioDatabase, displayName: string): Tag {
  * Replaces `articleId`'s tag set with `tagNames` (get-or-create each, then
  * swap the join rows), all in one transaction. Enforces the max-5-tags
  * policy (SPEC-002 "Tag policy").
+ *
+ * This function's own get-or-create branch has no override parameter, so a
+ * caller that needs deterministic tag ids/timestamps (the seed pipeline)
+ * must call `getOrCreateTag(db, name, overrides)` for every tag FIRST —
+ * by the time this function runs, every name already resolves to an
+ * existing row and this function's internal insert path never fires.
  */
 export function setArticleTags(db: MyrioDatabase, articleId: string, tagNames: string[]): Tag[] {
   if (tagNames.length > MAX_TAGS_PER_ARTICLE) {
