@@ -56,6 +56,18 @@ test.describe('skip link', () => {
   for (const route of ROUTES) {
     test(`is the first focusable element and moves focus to #main on ${route}`, async ({ page }) => {
       await page.goto(route);
+      // Next.js's dev-only tooling overlay (<nextjs-portal>, e.g. the dev
+      // tools indicator / error overlay) is injected at the very start of
+      // <body>, ahead of the app tree, only when running under `next dev`
+      // (the mode Playwright drives here per playwright.config.ts). It does
+      // not exist in a production build and is not part of the app, so it
+      // must not participate in the "first focusable element" contract.
+      // Removing it before the Tab press scopes the assertion to the
+      // application document without touching app-tree focus order — if
+      // SkipLink stops being first inside the app tree, this still fails.
+      await page.evaluate(() => {
+        document.querySelectorAll('nextjs-portal').forEach((el) => el.remove());
+      });
       await page.keyboard.press('Tab');
       const focused = page.locator(':focus');
       await expect(focused).toHaveAttribute('href', '#main');
