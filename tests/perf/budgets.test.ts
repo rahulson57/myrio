@@ -1,5 +1,6 @@
-import { existsSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { createTempDb } from '../setup/temp-db';
 import { seedTestDb } from '../setup/seed-fixtures';
@@ -44,7 +45,33 @@ export const BUDGETS = {
 
 const repoRoot = path.resolve(__dirname, '..', '..');
 const seededDbPath = path.join(repoRoot, 'data', 'myrio.db');
-const appBuildManifestPath = path.join(repoRoot, '.next', 'app-build-manifest.json');
+const nextDir = path.join(repoRoot, '.next');
+const appBuildManifestPath = path.join(nextDir, 'app-build-manifest.json');
+
+/** Shape of `.next/app-build-manifest.json`: route key -> its JS/CSS chunk paths, relative to `.next/`. */
+type AppBuildManifest = {
+  pages?: Record<string, string[]>;
+};
+
+/**
+ * Does this app-router manifest key look like the `/@handle/:slug` article
+ * route? Matched by shape, not a hardcoded folder name — owning that
+ * folder/route decision belongs to Feed & Read (S09), not this task.
+ *
+ * Requires TWO distinct dynamic segments, one handle-like and one
+ * slug-like, rather than matching "slug" alone: SPEC-006's route map also
+ * gives S09 a `/tag/:tagSlug` route (single dynamic segment, likely folder
+ * `[tagSlug]`), and "tagSlug" contains "slug" as a substring. A single-segment
+ * "contains slug" test would collide with that route once it lands and
+ * silently budget-check the wrong bundle.
+ */
+function isArticleRouteKey(key: string): boolean {
+  if (!key.endsWith('/page')) return false;
+  const dynamicSegments = key.match(/\[[^\]]+\]/g) ?? [];
+  const hasHandleSegment = dynamicSegments.some((segment) => /handle/i.test(segment));
+  const hasSlugSegment = dynamicSegments.some((segment) => /slug/i.test(segment));
+  return dynamicSegments.length >= 2 && hasHandleSegment && hasSlugSegment;
+}
 
 describe('performance & size budgets (SPEC-001)', () => {
   it('defines a positive budget for every measured surface', () => {
@@ -69,18 +96,35 @@ describe('performance & size budgets (SPEC-001)', () => {
 
   it.skipIf(!existsSync(appBuildManifestPath))(
     '/@handle/:slug first-load JS stays under the client-bundle budget',
-    () => {
-      // Only runs once `next build` has produced a real app build manifest
-      // for the article route — that route belongs to the App Shell (S01
-      // sibling task) and Feed & Read (S09) slices, not this bootstrap task.
-      // Left unimplemented deliberately: parsing the manifest correctly can
-      // only be verified against a real build of that route, which doesn't
-      // exist yet. Whichever task first makes this file exist should
-      // implement and verify the real assertion here instead of trusting
-      // this comment.
-      throw new Error(
-        'app-build-manifest.json exists but the first-load JS assertion is not implemented yet',
+    (ctx) => {
+      // `next build` has produced a real app build manifest, but the
+      // article route (`/@handle/:slug`) itself belongs to Feed & Read
+      // (S09) — it may not exist in this build yet. Find its entry by
+      // shape (see isArticleRouteKey) rather than a hardcoded folder name.
+      const manifest = JSON.parse(readFileSync(appBuildManifestPath, 'utf8')) as AppBuildManifest;
+      const pages = manifest.pages ?? {};
+      const articleRouteKey = Object.keys(pages).find(isArticleRouteKey);
+
+      if (!articleRouteKey) {
+        ctx.skip(
+          'no /@handle/:slug route in this build yet (Feed & Read, S09) — nothing to measure',
+        );
+      }
+
+      const chunkFiles = [...new Set(pages[articleRouteKey!])].filter((file) =>
+        file.endsWith('.js'),
       );
+      expect(chunkFiles.length, `expected JS chunks for ${articleRouteKey}`).toBeGreaterThan(0);
+
+      const totalGzippedBytes = chunkFiles.reduce((sum, relativePath) => {
+        const contents = readFileSync(path.join(nextDir, relativePath));
+        return sum + gzipSync(contents).length;
+      }, 0);
+
+      expect(
+        totalGzippedBytes,
+        `first-load JS for ${articleRouteKey} was ${(totalGzippedBytes / 1024).toFixed(1)} KB gzipped`,
+      ).toBeLessThanOrEqual(BUDGETS.articleFirstLoadJsMaxBytes);
     },
   );
 
