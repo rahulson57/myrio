@@ -2,12 +2,16 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createArticle } from '../articles';
 import { createComment, getCommentById } from '../comments';
 import { countFollowers, countFollowing, followUser } from '../follows';
-import { createUser } from '../users';
+import { createUser, updateUserProfile } from '../users';
 import { createMigratedTestDb, type TestDb } from './helpers';
 
 /**
- * Coverage for the two additive Data Layer grants made under DEC-044 to
- * unblock Social Graph (TASK-022): `getCommentById` (comments.ts) and
+ * Coverage for the additive Data Layer grants made to unblock Social Graph
+ * (TASK-022): `getCommentById`/`countFollowers`/`countFollowing` (DEC-044)
+ * and `UpdateUserProfileInput.handle` (DEC-047). The first two are new
+ * functions mirroring an existing shape elsewhere; the third widens an
+ * existing exported type by one optional field to expose a column
+ * (`users.handle`) that already existed but wasn't writable on update.
  * `countFollowers`/`countFollowing` (follows.ts). Both mirror an existing
  * shape elsewhere in this file (getArticleById/getUserById/getUploadById,
  * and listFollowing respectively) — this file only tests the two new
@@ -116,6 +120,42 @@ describe('DEC-044 additive grants', () => {
       followUser(testDb.db, follower.id, a2.id);
 
       expect(countFollowing(testDb.db, follower.id)).toBe(2);
+    });
+  });
+
+  describe('updateUserProfile handle field (DEC-047)', () => {
+    it('persists a new handle', () => {
+      const user = createUser(testDb.db, {
+        email: 'handle1@example.com',
+        passwordHash: 'x',
+        handle: 'oldhandle',
+        displayName: 'Handle Tester',
+      });
+
+      const updated = updateUserProfile(testDb.db, user.id, { handle: 'newhandle' });
+      expect(updated?.handle).toBe('newhandle');
+    });
+
+    it('raises a constraint error rather than silently succeeding when the handle is taken', () => {
+      createUser(testDb.db, {
+        email: 'taken@example.com',
+        passwordHash: 'x',
+        handle: 'takenhandle',
+        displayName: 'First',
+      });
+      const second = createUser(testDb.db, {
+        email: 'second@example.com',
+        passwordHash: 'x',
+        handle: 'secondhandle',
+        displayName: 'Second',
+      });
+
+      // Documents the hazard DEC-047 flagged: `users.handle` is UNIQUE NOT
+      // NULL, so this throws (SQLite constraint violation) instead of
+      // returning undefined — callers (profiles.ts) must check
+      // `getUserByHandle` themselves BEFORE calling this, which is exactly
+      // what src/server/services/profiles.ts's `updateProfile` does.
+      expect(() => updateUserProfile(testDb.db, second.id, { handle: 'takenhandle' })).toThrow();
     });
   });
 });

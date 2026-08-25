@@ -8,12 +8,9 @@ import type { MyrioDatabase } from '../db/client';
 
 /**
  * Profiles service (SPEC-007 "Profile"). Validates `PATCH /api/profile`
- * inputs and orchestrates the update. The handle-change path needs a
- * repository capability that doesn't exist yet (`UpdateUserProfileInput`
- * has no `handle` field at all) — flagged separately from the rate-limit
- * clock question below (MSG-2065), still open. Until it lands, that one
- * path is wired behind an injected function so the rest of this module
- * (which needs none of it) is complete and independently testable.
+ * inputs and orchestrates the update, including the handle-change path
+ * (DEC-047 widened `UpdateUserProfileInput` with a `handle` field, an
+ * existing column that just wasn't exposed on update before).
  */
 
 export const BIO_MAX_LENGTH = 160;
@@ -62,8 +59,10 @@ export class ProfileValidationError extends Error {
  * requested and explicitly NOT granted — adding a column + migration to
  * `schema.ts` is a data-model change to a DONE task's file, which CLAUDE.md
  * requires stopping on rather than treating as the same additive-function
- * exception already granted elsewhere (getCommentById,
- * countFollowers/countFollowing). It's with the human now.
+ * exception granted for getCommentById/countFollowers/countFollowing
+ * (DEC-044) and the `handle` field itself (DEC-047, an existing column
+ * exposed on an existing update path — not a data-model change). It's with
+ * the human now.
  *
  * This in-process tracker is therefore the SHIPPED implementation, not a
  * stand-in — but it is provisional in a real sense: it resets on server
@@ -89,17 +88,6 @@ export function createInMemoryHandleChangeTracker(): HandleChangeTracker {
   };
 }
 
-/**
- * Persists a handle change. No default implementation exists yet — the
- * repository's `UpdateUserProfileInput` has no `handle` field (pending
- * grant). Callers that don't change `handle` never need this.
- */
-export type PersistHandleChangeFn = (
-  db: MyrioDatabase,
-  userId: string,
-  handle: string,
-) => User | undefined;
-
 export interface UpdateProfileInput {
   displayName?: string;
   bio?: string | null;
@@ -124,17 +112,29 @@ function isHttpUrl(value: string): boolean {
   }
 }
 
+/** True for a better-sqlite3 UNIQUE constraint violation (message form: `UNIQUE constraint failed: users.handle`). */
+function isUniqueConstraintError(err: unknown): boolean {
+  return err instanceof Error && /UNIQUE constraint failed/i.test(err.message);
+}
+
 export interface UpdateProfileDeps {
   tracker: HandleChangeTracker;
-  persistHandleChange?: PersistHandleChangeFn;
   now?: number;
 }
 
 /**
  * Validates and applies a profile update. Field validation runs BEFORE any
  * write (SPEC-009: field-keyed errors, no partial-apply-then-fail). A
- * handle change is additionally checked for the 30-day cooldown and
- * uniqueness before being persisted via `deps.persistHandleChange`.
+ * handle change is additionally checked against the 30-day cooldown and
+ * uniqueness before being persisted.
+ *
+ * `users.handle` is UNIQUE NOT NULL (DEC-047's flagged hazard): the
+ * proactive `getUserByHandle` check below closes the ordinary case, and
+ * the write is still wrapped in a try/catch that maps a residual UNIQUE
+ * violation to `HandleTakenError` rather than letting it surface as a raw
+ * 500 — defense in depth, not the primary guard (this app's single
+ * synchronous better-sqlite3 connection means there's no `await` between
+ * the check and the write for another request to race into).
  */
 export function updateProfile(
   db: MyrioDatabase,
@@ -197,30 +197,30 @@ export function updateProfile(
     }
   }
 
-  let result: User | undefined = user;
+  let updated: User | undefined;
+  try {
+    updated = repoUpdateUserProfile(db, userId, {
+      displayName: input.displayName,
+      bio: input.bio,
+      handle: normalizedHandle,
+      avatarUploadId: input.avatarUploadId,
+      coverUploadId: input.coverUploadId,
+      socialTwitter: input.socialTwitter,
+      socialGithub: input.socialGithub,
+      socialWebsite: input.socialWebsite,
+    });
+  } catch (err) {
+    if (normalizedHandle !== undefined && isUniqueConstraintError(err)) {
+      throw new HandleTakenError();
+    }
+    throw err;
+  }
 
   if (normalizedHandle !== undefined) {
-    if (!deps.persistHandleChange) {
-      throw new Error(
-        'Handle updates are not yet supported: UpdateUserProfileInput has no `handle` field ' +
-          '(pending Data Layer grant — see this task\'s proposal notes).',
-      );
-    }
-    result = deps.persistHandleChange(db, userId, normalizedHandle) ?? result;
     deps.tracker.recordChange(userId, now);
   }
 
-  const rest = repoUpdateUserProfile(db, userId, {
-    displayName: input.displayName,
-    bio: input.bio,
-    avatarUploadId: input.avatarUploadId,
-    coverUploadId: input.coverUploadId,
-    socialTwitter: input.socialTwitter,
-    socialGithub: input.socialGithub,
-    socialWebsite: input.socialWebsite,
-  });
-
-  return rest ?? result;
+  return updated ?? user;
 }
 
 export function getProfileByHandle(db: MyrioDatabase, handle: string): User | undefined {
