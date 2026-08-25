@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { forgot } from '../../../src/app/api/auth/forgot/route';
-import { reset } from '../../../src/app/api/auth/reset/route';
-import { login } from '../../../src/app/api/auth/login/route';
+import { forgot } from '../../../src/app/api/auth/forgot/handler';
+import { reset } from '../../../src/app/api/auth/reset/handler';
+import { login } from '../../../src/app/api/auth/login/handler';
 import { createSessionForUser } from '../../../src/server/auth/session';
 import { resetRateLimitStore } from '../../../src/server/auth/rate-limit';
 import { createMigratedTestDb, createTestUser, jsonRequest, VALID_ORIGIN, type TestDb } from '../test-utils';

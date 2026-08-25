@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { logout } from '../../../src/app/api/auth/logout/route';
+import { logout } from '../../../src/app/api/auth/logout/handler';
 import { createSessionForUser } from '../../../src/server/auth/session';
 import { createMigratedTestDb, createTestUser, jsonRequest, VALID_ORIGIN, type TestDb } from '../test-utils';
 

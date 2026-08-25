@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { forgot } from '../../../src/app/api/auth/forgot/route';
+import { forgot } from '../../../src/app/api/auth/forgot/handler';
 import { resetRateLimitStore } from '../../../src/server/auth/rate-limit';
 import { createMigratedTestDb, createTestUser, jsonRequest, VALID_ORIGIN, type TestDb } from '../test-utils';
 

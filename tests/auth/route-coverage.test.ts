@@ -19,10 +19,20 @@
  * Written to scan all of `src/app/api/**`, not just `src/app/api/auth/**`,
  * so it keeps doing its job as later slices (drafts, comments, uploads, …)
  * add their own mutating routes.
+ *
+ * `route.ts` files here are thin wrappers, not the whole handler: Next's
+ * route type validator (`next build` / `.next/types/validator.ts`) rejects
+ * a `route.ts` that exports anything other than a recognized route field
+ * (GET/POST/etc. + config), and separately rejects a handler whose second
+ * parameter isn't a `RouteContext` — which a db-injection parameter (used
+ * so tests can pass an isolated test db instead of the real singleton)
+ * isn't. So the actual `requireUser`-calling logic lives in a sibling
+ * `handler.ts` that `route.ts` imports and calls; this scan follows that
+ * import so it still sees the real check rather than just the wrapper.
  */
 
 import { describe, expect, it } from 'vitest';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const API_ROOT = path.join(process.cwd(), 'src/app/api');
@@ -51,6 +61,13 @@ function findRouteFiles(dir: string): string[] {
 const MUTATING_EXPORT_RE = /export\s+(const|async function)\s+(POST|PATCH|DELETE)\b/;
 const MUTATING_REEXPORT_RE = /export\s*\{\s*[^}]*\bas\s+(POST|PATCH|DELETE)\b[^}]*\}/;
 
+/** `route.ts`'s own source, plus a sibling `handler.ts`'s source if one exists (see file header). */
+function readRouteSource(file: string): string {
+  const own = readFileSync(file, 'utf-8');
+  const handlerPath = path.join(path.dirname(file), 'handler.ts');
+  return existsSync(handlerPath) ? `${own}\n${readFileSync(handlerPath, 'utf-8')}` : own;
+}
+
 describe('route coverage: every mutating handler calls requireUser (or is explicitly public)', () => {
   const routeFiles = findRouteFiles(API_ROOT);
 
@@ -60,7 +77,7 @@ describe('route coverage: every mutating handler calls requireUser (or is explic
 
   for (const file of routeFiles) {
     const relative = path.relative(process.cwd(), file).split(path.sep).join('/');
-    const source = readFileSync(file, 'utf-8');
+    const source = readRouteSource(file);
     const isMutating = MUTATING_EXPORT_RE.test(source) || MUTATING_REEXPORT_RE.test(source);
 
     if (!isMutating) continue;

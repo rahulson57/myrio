@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { signup } from '../../../src/app/api/auth/signup/route';
+import { signup } from '../../../src/app/api/auth/signup/handler';
 import { getUserByEmail } from '../../../src/server/db/repositories/users';
 import { resetRateLimitStore } from '../../../src/server/auth/rate-limit';
 import { createMigratedTestDb, jsonRequest, VALID_ORIGIN, extractSessionCookieValue, type TestDb } from '../test-utils';
