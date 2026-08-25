@@ -46,3 +46,8 @@ npm-debug.log*
 .DS_Store
 .vscode/
 .idea/
+
+# Next.js build output moved aside by tooling (e.g. .next.stale-<hash>/).
+# The bare `.next/` rule above does not cover these renamed copies; one was
+# committed accidentally via PROP-390. See DEC-055.
+.next.stale-*/
