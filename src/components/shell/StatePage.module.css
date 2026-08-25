@@ -1,0 +1,79 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-4);
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--s-8) var(--s-4);
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--font-ui);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-heading);
+  color: var(--fg);
+  margin: 0;
+}
+
+.message {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  color: var(--fg-muted);
+  margin: 0;
+  max-width: 480px;
+}
+
+.actions {
+  display: flex;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 var(--s-4);
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-fg);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+}
+
+.homeLink:hover {
+  opacity: 0.9;
+}
+
+.homeLink:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.retryButton {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 var(--s-4);
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+}
+
+.retryButton:hover {
+  background: var(--bg-subtle);
+}
+
+.retryButton:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}

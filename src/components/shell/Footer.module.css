@@ -1,0 +1,32 @@
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  margin-top: var(--s-8);
+  border-top: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-family: var(--font-ui);
+  font-size: var(--fs-meta);
+}
+
+.links {
+  display: flex;
+  gap: var(--s-4);
+}
+
+.links a {
+  color: var(--fg-muted);
+}
+
+.links a:hover {
+  color: var(--fg);
+}
+
+.links a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}

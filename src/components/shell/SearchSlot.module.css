@@ -1,0 +1,107 @@
+/*
+ * Search box ownership boundary (SPEC-009): the App Shell owns this slot's
+ * width and responsive behaviour only. The debounce, dropdown and API
+ * contract of the real search experience belong to the Search section
+ * (src/components/search/**, a later slice — out of scope here). This
+ * component is the shell-owned stand-in the header mounts today so every
+ * route already has a real, accessible search input; the Search slice
+ * later slots its own `<SearchBox />` into this same header position.
+ */
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  width: 100%;
+  max-width: 360px;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+}
+
+.field:focus-within {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.icon {
+  color: var(--fg-muted);
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  color: var(--fg);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--fg-muted);
+}
+
+.desktopField {
+  display: none;
+}
+
+.mobileTrigger {
+  display: inline-flex;
+}
+
+@media (min-width: 720px) {
+  .desktopField {
+    display: flex;
+  }
+
+  .mobileTrigger {
+    display: none;
+  }
+}
+
+.mobileTrigger,
+.overlayClose {
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.mobileTrigger:hover,
+.overlayClose:hover {
+  background: var(--bg-subtle);
+}
+
+.mobileTrigger:focus-visible,
+.overlayClose:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.overlay .field {
+  max-width: none;
+}
