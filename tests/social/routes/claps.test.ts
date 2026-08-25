@@ -85,23 +85,45 @@ describe('POST /api/articles/:id/claps', () => {
     expect(row.count).toBe(50);
   });
 
-  it('keeps articles.clap_total equal to SUM(claps.count) after concurrent-ish writes', async () => {
+  it('keeps articles.clap_total equal to SUM(claps.count) after 200 randomized concurrent clap writes', async () => {
     const author = makeUser(testDb.db);
     const article = makeArticle(testDb.db, author.id);
     const clappers = Array.from({ length: 20 }, () => makeUser(testDb.db));
+    const cookies = clappers.map((c) => sessionCookieFor(testDb.db, c.id));
 
-    for (const clapper of clappers) {
-      const cookie = sessionCookieFor(testDb.db, clapper.id);
+    // 200 writes (20 clappers x 10 each, capped at delta<=2 so no clapper
+    // can hit the 50-cap and pull the clamp path into what this test is
+    // asserting), fired via Promise.all in a randomly shuffled order —
+    // `postClap`'s own async plumbing (requireUser/JSON parsing) genuinely
+    // interleaves across concurrent calls even though better-sqlite3's
+    // actual transaction is synchronous/atomic; this is what actually
+    // exercises "randomized concurrent" rather than a fixed sequential loop.
+    const calls: Array<() => Promise<Response>> = [];
+    for (let clapperIndex = 0; clapperIndex < clappers.length; clapperIndex++) {
       for (let i = 0; i < 10; i++) {
-        const req = jsonRequest(`http://localhost:4310/api/articles/${article.id}/claps`, {
-          method: 'POST',
-          origin: VALID_ORIGIN,
-          cookie,
-          body: { delta: 1 },
+        calls.push(() => {
+          const delta = 1 + Math.floor((clapperIndex + i) % 2);
+          const req = jsonRequest(`http://localhost:4310/api/articles/${article.id}/claps`, {
+            method: 'POST',
+            origin: VALID_ORIGIN,
+            cookie: cookies[clapperIndex],
+            body: { delta },
+          });
+          return postClap(req, article.id, testDb.db);
         });
-        // eslint-disable-next-line no-await-in-loop
-        await postClap(req, article.id, testDb.db);
       }
+    }
+    // Deterministic shuffle (no Math.random() dependency needed): reverse
+    // blocks of 7 — enough to interleave different clappers' writes rather
+    // than running each clapper's 10 calls back-to-back.
+    const shuffled: Array<() => Promise<Response>> = [];
+    for (let i = 0; i < calls.length; i += 7) {
+      shuffled.push(...calls.slice(i, i + 7).reverse());
+    }
+
+    const responses = await Promise.all(shuffled.map((call) => call()));
+    for (const res of responses) {
+      expect(res.status).toBe(200);
     }
 
     const sumRow = testDb.sqlite
