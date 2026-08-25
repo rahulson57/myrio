@@ -127,3 +127,16 @@ export function listCommentsForArticle(db: MyrioDatabase, articleId: string): Co
     .orderBy(comments.createdAt)
     .all();
 }
+
+/**
+ * Looks up a single comment by id (mirrors `getArticleById`/`getUserById`/
+ * `getUploadById`'s shape — every other table has this getter; comments
+ * was the one missing it). Added under DEC-044 (Social Graph/TASK-022):
+ * needed to authorize `DELETE /api/comments/:id` (only the comment author
+ * or the article author may delete) and to resolve the articleId for
+ * `GET /api/comments/:id/replies`, neither of which is derivable from a
+ * comment id alone without this.
+ */
+export function getCommentById(db: MyrioDatabase, id: string): Comment | undefined {
+  return db.select().from(comments).where(eq(comments.id, id)).get();
+}

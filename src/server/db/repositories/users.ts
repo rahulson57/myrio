@@ -69,6 +69,15 @@ export function getUserByHandle(db: MyrioDatabase, handle: string): User | undef
 export interface UpdateUserProfileInput {
   displayName?: string;
   bio?: string | null;
+  /** Added under DEC-047 (Social Graph/TASK-022): `handle` already exists
+   * on `users` (unique, set at insert) but was never exposed on update —
+   * PATCH /api/profile needs to change it. Purely additive: an existing
+   * column, a widened interface, no schema/migration change. NOTE this
+   * column is UNIQUE NOT NULL — setting it to a value another row already
+   * holds raises a SQLite constraint error rather than returning
+   * `undefined` the way a missing-row update does; callers must check
+   * uniqueness themselves first (src/server/services/profiles.ts does). */
+  handle?: string;
   avatarUploadId?: string | null;
   coverUploadId?: string | null;
   socialTwitter?: string | null;
