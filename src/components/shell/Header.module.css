@@ -1,0 +1,106 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  height: 64px;
+  padding: 0 var(--s-5);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.searchArea {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-shrink: 0;
+}
+
+.writeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  height: 40px;
+  padding: 0 var(--s-4);
+  border-radius: var(--radius-full);
+  color: var(--fg);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  white-space: nowrap;
+}
+
+.writeLink:hover {
+  background: var(--bg-subtle);
+}
+
+.writeLink:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.writeLabel {
+  display: none;
+}
+
+.signedOutActions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-shrink: 0;
+}
+
+.signInLink {
+  color: var(--fg);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.signInLink:hover {
+  background: var(--bg-subtle);
+}
+
+.signInLink:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.getStartedLink {
+  color: var(--accent-fg);
+  background: var(--accent);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.getStartedLink:hover {
+  opacity: 0.9;
+}
+
+.getStartedLink:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@media (min-width: 720px) {
+  .writeLabel {
+    display: inline;
+  }
+}
