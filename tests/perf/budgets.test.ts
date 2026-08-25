@@ -1,5 +1,6 @@
-import { existsSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 
 /**
@@ -40,7 +41,36 @@ export const BUDGETS = {
 
 const repoRoot = path.resolve(__dirname, '..', '..');
 const seededDbPath = path.join(repoRoot, 'data', 'myrio.db');
-const appBuildManifestPath = path.join(repoRoot, '.next', 'app-build-manifest.json');
+const nextDir = path.join(repoRoot, '.next');
+const appBuildManifestPath = path.join(nextDir, 'app-build-manifest.json');
+
+interface AppBuildManifest {
+  pages: Record<string, string[]>;
+}
+
+/**
+ * The article route (`/@handle/:slug`) is owned by a later slice (S09 Feed &
+ * Read) and doesn't exist yet — this bootstrap task (S01) only ever produces
+ * `/layout`, `/error`, `/not-found` and `/_not-found/page` in the App Router
+ * build manifest. Of the 7 routes SPEC-009 lists (`/`, `/@handle`,
+ * `/@handle/:slug`, `/tag/:slug`, `/search`, `/new`, `/inbox`),
+ * `/@handle/:slug` is the only one shaped as two consecutive dynamic
+ * segments, so matching that shape (rather than hardcoding a guess at S09's
+ * eventual folder/param names) finds it as soon as it lands and leaves every
+ * other route alone.
+ */
+const ARTICLE_ROUTE_PAGE_KEY = /^\/\[[^/\]]+\]\/\[[^/\]]+\]\/page$/;
+
+function findArticleRouteManifestEntry(): { chunkPaths: string[] } | null {
+  if (!existsSync(appBuildManifestPath)) return null;
+  const manifest = JSON.parse(readFileSync(appBuildManifestPath, 'utf8')) as AppBuildManifest;
+  const key = Object.keys(manifest.pages ?? {}).find((candidate) =>
+    ARTICLE_ROUTE_PAGE_KEY.test(candidate),
+  );
+  const chunks = key ? manifest.pages[key] : undefined;
+  if (!chunks) return null;
+  return { chunkPaths: chunks.filter((chunkPath) => chunkPath.endsWith('.js')) };
+}
 
 describe('performance & size budgets (SPEC-001)', () => {
   it('defines a positive budget for every measured surface', () => {
@@ -63,20 +93,24 @@ describe('performance & size budgets (SPEC-001)', () => {
     expect(size).toBeLessThan(BUDGETS.dbSeedMaxBytes);
   });
 
-  it.skipIf(!existsSync(appBuildManifestPath))(
+  const articleRoute = findArticleRouteManifestEntry();
+
+  it.skipIf(!articleRoute)(
     '/@handle/:slug first-load JS stays under the client-bundle budget',
     () => {
       // Only runs once `next build` has produced a real app build manifest
-      // for the article route — that route belongs to the App Shell (S01
-      // sibling task) and Feed & Read (S09) slices, not this bootstrap task.
-      // Left unimplemented deliberately: parsing the manifest correctly can
-      // only be verified against a real build of that route, which doesn't
-      // exist yet. Whichever task first makes this file exist should
-      // implement and verify the real assertion here instead of trusting
-      // this comment.
-      throw new Error(
-        'app-build-manifest.json exists but the first-load JS assertion is not implemented yet',
-      );
+      // containing the article route — that route belongs to Feed & Read
+      // (S09), not this bootstrap task (S01). Until then this is skipped
+      // (see findArticleRouteManifestEntry above) rather than asserting
+      // against a route that doesn't exist. Once S09 lands the route, this
+      // sums the gzipped size of every JS chunk the manifest lists for it
+      // (shared chunks, e.g. the header, included — SPEC-009 counts those
+      // against the budget) and checks it against the real budget.
+      const totalGzipBytes = articleRoute!.chunkPaths.reduce((sum, chunkPath) => {
+        const size = gzipSync(readFileSync(path.join(nextDir, chunkPath))).length;
+        return sum + size;
+      }, 0);
+      expect(totalGzipBytes).toBeLessThanOrEqual(BUDGETS.articleFirstLoadJsMaxBytes);
     },
   );
 
