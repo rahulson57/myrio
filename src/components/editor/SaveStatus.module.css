@@ -1,0 +1,9 @@
+.status {
+  font-size: var(--fs-meta, 14px);
+  color: var(--fg-muted);
+  margin: 0;
+}
+
+.status[data-status='failed'] {
+  color: var(--danger);
+}

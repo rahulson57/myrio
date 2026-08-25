@@ -1,0 +1,43 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1, 4px);
+  padding: var(--s-2, 8px) 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--s-4, 16px);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 var(--s-2, 8px);
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: var(--fs-ui, 16px);
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: var(--border);
+}
+
+.button[aria-pressed='true'] {
+  background: var(--bg-subtle);
+  border-color: var(--border);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+}
