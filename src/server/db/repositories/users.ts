@@ -97,3 +97,27 @@ export function updateUserProfile(
     .returning()
     .get();
 }
+
+/**
+ * Sets a user's `password_hash` (a fresh argon2id encoding — the caller
+ * hashes, this module never sees a plaintext password). Added for the Auth
+ * & Session module (TASK-020): SPEC-004's `/api/auth/reset` "rehashes the
+ * password", but `users.password_hash` had no write path outside
+ * `createUser` (set once, at signup) — `updateUserProfile` above
+ * deliberately doesn't touch it. Mirrors `updateUserProfile`'s shape;
+ * requested and flagged in that task's proposal the same way DEC-034
+ * flagged `renewSession` on `sessions.ts` — same structural gap (a LOCKED
+ * spec needing a small write path on a file this task doesn't own), same
+ * resolution (narrow, additive, test-covered). */
+export function updateUserPassword(
+  db: MyrioDatabase,
+  id: string,
+  passwordHash: string,
+): User | undefined {
+  return db
+    .update(users)
+    .set({ passwordHash, updatedAt: Date.now() })
+    .where(eq(users.id, id))
+    .returning()
+    .get();
+}
