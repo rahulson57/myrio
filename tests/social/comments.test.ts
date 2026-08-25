@@ -113,11 +113,11 @@ describe('comments service (SPEC-007)', () => {
       bodyText: 'hello',
     });
 
-    expect(() => deleteComment(testDb.db, comment.id, article.id, stranger.id)).toThrow(
+    expect(() => deleteComment(testDb.db, comment.id, stranger.id)).toThrow(
       NotCommentAuthorError,
     );
 
-    const deleted = deleteComment(testDb.db, comment.id, article.id, author.id);
+    const deleted = deleteComment(testDb.db, comment.id, author.id);
     expect(deleted.deletedAt).not.toBeNull();
     expect(deleted.bodyText).toBe('');
   });
@@ -132,7 +132,7 @@ describe('comments service (SPEC-007)', () => {
       bodyText: 'hello',
     });
 
-    const deleted = deleteComment(testDb.db, comment.id, article.id, commenter.id);
+    const deleted = deleteComment(testDb.db, comment.id, commenter.id);
     expect(deleted.deletedAt).not.toBeNull();
   });
 
@@ -153,9 +153,9 @@ describe('comments service (SPEC-007)', () => {
       parentId: top.id,
     });
 
-    deleteComment(testDb.db, top.id, article.id, author.id);
+    deleteComment(testDb.db, top.id, author.id);
 
-    const replies = listReplies(testDb.db, article.id, top.id);
+    const replies = listReplies(testDb.db, top.id);
     expect(replies.items).toHaveLength(1);
     expect(replies.items[0]?.bodyText).toBe('a reply');
   });
@@ -180,7 +180,7 @@ describe('comments service (SPEC-007)', () => {
 
     expect(getArticleById(testDb.db, article.id)?.commentCount).toBe(3);
 
-    deleteComment(testDb.db, c1.id, article.id, author.id);
+    deleteComment(testDb.db, c1.id, author.id);
     expect(getArticleById(testDb.db, article.id)?.commentCount).toBe(2);
   });
 

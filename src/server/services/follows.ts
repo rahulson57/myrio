@@ -2,6 +2,7 @@ import {
   followUser as repoFollowUser,
   unfollowUser as repoUnfollowUser,
   isFollowing,
+  countFollowers,
   type Follow,
 } from '../db/repositories/follows';
 import type { MyrioDatabase } from '../db/client';
@@ -13,10 +14,10 @@ import type { MyrioDatabase } from '../db/client';
  * reject a duplicate), so this module checks `isFollowing` first and
  * no-ops rather than letting a second POST hit a constraint violation.
  *
- * Follower/following counts are intentionally NOT denormalized (SPEC-007
- * "Derivation note"): they're computed via `COUNT(*)` on every read. The
- * count functions themselves live in the Data Layer repository (pending
- * grant — see this task's proposal notes); this module only orchestrates.
+ * Follower counts are intentionally NOT denormalized (SPEC-007
+ * "Derivation note"): `countFollowers` (DEC-044 grant on
+ * `src/server/db/repositories/follows.ts`) computes `COUNT(*)` on every
+ * read.
  */
 
 export class SelfFollowError extends Error {
@@ -39,12 +40,7 @@ export interface FollowResult {
  * CHECK is the backstop, not the primary guard, so the rejection is a
  * clean service-level error rather than a raw constraint failure.
  */
-export function follow(
-  db: MyrioDatabase,
-  followerId: string,
-  followingId: string,
-  countFollowers: (db: MyrioDatabase, followingId: string) => number,
-): FollowResult {
+export function follow(db: MyrioDatabase, followerId: string, followingId: string): FollowResult {
   if (followerId === followingId) {
     throw new SelfFollowError();
   }
@@ -57,12 +53,7 @@ export function follow(
 }
 
 /** Idempotent unfollow — a second DELETE is a no-op and still returns `following: false`. */
-export function unfollow(
-  db: MyrioDatabase,
-  followerId: string,
-  followingId: string,
-  countFollowers: (db: MyrioDatabase, followingId: string) => number,
-): FollowResult {
+export function unfollow(db: MyrioDatabase, followerId: string, followingId: string): FollowResult {
   repoUnfollowUser(db, followerId, followingId);
   return { following: false, followerCount: countFollowers(db, followingId) };
 }

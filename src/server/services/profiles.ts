@@ -10,10 +10,10 @@ import type { MyrioDatabase } from '../db/client';
  * Profiles service (SPEC-007 "Profile"). Validates `PATCH /api/profile`
  * inputs and orchestrates the update. The handle-change path needs a
  * repository capability that doesn't exist yet (`UpdateUserProfileInput`
- * has no `handle` field at all) — see this task's proposal notes for the
- * pending Data Layer grant. Until it lands, that one path is wired behind
- * an injected function so the rest of this module (which needs none of
- * it) is complete and independently testable.
+ * has no `handle` field at all) — flagged separately from the rate-limit
+ * clock question below (MSG-2065), still open. Until it lands, that one
+ * path is wired behind an injected function so the rest of this module
+ * (which needs none of it) is complete and independently testable.
  */
 
 export const BIO_MAX_LENGTH = 160;
@@ -54,13 +54,25 @@ export class ProfileValidationError extends Error {
 }
 
 /**
- * Tracks the last time each user changed their handle. In-process Map by
- * default (mirrors `src/server/auth/rate-limit.ts`'s established pattern:
- * "no Redis, a single process has no coordination problem to solve") —
- * PROVISIONAL pending a coordinator ruling on whether this instead needs a
- * persisted `users.handle_changed_at` column so the cooldown survives a
- * server restart (see task discussion). Swappable behind this interface
- * without touching call sites either way.
+ * Tracks the last time each user changed their handle. In-process Map
+ * (mirrors `src/server/auth/rate-limit.ts`'s established pattern: "no
+ * Redis, a single process has no coordination problem to solve").
+ *
+ * DEC-044 (ruled): a persisted `users.handle_changed_at` column was
+ * requested and explicitly NOT granted — adding a column + migration to
+ * `schema.ts` is a data-model change to a DONE task's file, which CLAUDE.md
+ * requires stopping on rather than treating as the same additive-function
+ * exception already granted elsewhere (getCommentById,
+ * countFollowers/countFollowing). It's with the human now.
+ *
+ * This in-process tracker is therefore the SHIPPED implementation, not a
+ * stand-in — but it is provisional in a real sense: it resets on server
+ * restart, so the 30-day cooldown is enforced only within one process's
+ * uptime, not durably across restarts the way SPEC-007's "not reserved...
+ * changing it changes those URLs" framing implies it should be. Disclose
+ * this criterion as not durably met, not as fully satisfied. If/when the
+ * column lands, swapping this interface's implementation is a one-function
+ * change — no call site here needs to move.
  */
 export interface HandleChangeTracker {
   getLastChangedAt(userId: string): number | undefined;

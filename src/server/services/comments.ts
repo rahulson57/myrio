@@ -3,6 +3,7 @@ import {
   createComment as repoCreateComment,
   softDeleteComment as repoSoftDeleteComment,
   listCommentsForArticle,
+  getCommentById,
   type Comment,
 } from '../db/repositories/comments';
 import { getArticleById } from '../db/repositories/articles';
@@ -71,13 +72,8 @@ export interface CreateCommentServiceInput {
  * Validates body length and (for a reply) that `parentId` names a
  * top-level comment belonging to the SAME article, then delegates to the
  * repository for the depth check + insert + `comment_count` update (one
- * transaction).
- *
- * `listCommentsForArticle` is used here — not a new repository query — to
- * find the parent by id, since the repository doesn't expose a
- * single-comment getter yet (tracked separately; see this task's proposal
- * notes for the pending `getCommentById` grant, which will replace this
- * lookup with an O(1) one instead of an O(article comment count) scan).
+ * transaction). Parent lookup is `getCommentById` (DEC-044 grant) — O(1),
+ * not a scan of the article's comments.
  */
 export function createComment(db: MyrioDatabase, input: CreateCommentServiceInput): Comment {
   const trimmed = input.bodyText;
@@ -91,16 +87,8 @@ export function createComment(db: MyrioDatabase, input: CreateCommentServiceInpu
   }
 
   if (input.parentId) {
-    const parent = listCommentsForArticle(db, input.articleId).find(
-      (c) => c.id === input.parentId,
-    );
-    if (!parent) {
-      throw new ParentNotFoundError();
-    }
-    // Same-article check is redundant with the scan above (it only looked
-    // at this article's comments) but stated explicitly so the invariant
-    // reads at the call site rather than being implied by the lookup.
-    if (parent.articleId !== input.articleId) {
+    const parent = getCommentById(db, input.parentId);
+    if (!parent || parent.articleId !== input.articleId) {
       throw new ParentNotFoundError();
     }
   }
@@ -115,25 +103,17 @@ export function createComment(db: MyrioDatabase, input: CreateCommentServiceInpu
 
 /**
  * Soft-deletes a comment. Only the comment's author or the article's
- * author may do so (SPEC-007: 403 otherwise). Looks the comment up via
- * `listCommentsForArticle`... but that needs an articleId, which the
- * caller (route handler, `DELETE /api/comments/:id`) doesn't have from the
- * URL alone. This is exactly the gap the pending `getCommentById` grant
- * closes — until it lands, callers must resolve articleId themselves (this
- * function accepts it explicitly rather than guessing).
+ * author may do so (SPEC-007: 403 otherwise). `getCommentById` (DEC-044
+ * grant) resolves both the comment and its articleId from just the id —
+ * `DELETE /api/comments/:id` has nothing else to go on from the URL.
  */
-export function deleteComment(
-  db: MyrioDatabase,
-  commentId: string,
-  articleId: string,
-  requestingUserId: string,
-): Comment {
-  const comment = listCommentsForArticle(db, articleId).find((c) => c.id === commentId);
+export function deleteComment(db: MyrioDatabase, commentId: string, requestingUserId: string): Comment {
+  const comment = getCommentById(db, commentId);
   if (!comment) {
     throw new CommentNotFoundError();
   }
 
-  const article = getArticleById(db, articleId);
+  const article = getArticleById(db, comment.articleId);
   if (!article) {
     throw new ArticleNotFoundError();
   }
@@ -271,15 +251,16 @@ export interface RepliesPage {
  * cursor-paginated at `PAGE_SIZE` (SPEC-007: `GET
  * /api/comments/:id/replies`). Works whether or not the parent itself was
  * soft-deleted — replies stay attached regardless (SPEC-007 acceptance
- * criterion).
+ * criterion). Resolves the parent's articleId via `getCommentById`
+ * (DEC-044 grant) since the URL carries only the parent's id.
  */
-export function listReplies(
-  db: MyrioDatabase,
-  articleId: string,
-  parentId: string,
-  cursor?: string | null,
-): RepliesPage {
-  const all = listCommentsForArticle(db, articleId);
+export function listReplies(db: MyrioDatabase, parentId: string, cursor?: string | null): RepliesPage {
+  const parent = getCommentById(db, parentId);
+  if (!parent) {
+    throw new CommentNotFoundError();
+  }
+
+  const all = listCommentsForArticle(db, parent.articleId);
   const replies = all
     .filter((c) => c.parentId === parentId)
     .sort((a, b) => compareCursor(a, b));

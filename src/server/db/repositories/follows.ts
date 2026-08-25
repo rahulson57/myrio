@@ -58,3 +58,25 @@ export function listFollowing(db: MyrioDatabase, followerId: string): Follow[] {
     .orderBy(desc(follows.createdAt))
     .all();
 }
+
+/**
+ * Added under DEC-044 (Social Graph/TASK-022): SPEC-007 requires
+ * follower/following counts via `COUNT(*)` over `follows`, explicitly NOT
+ * denormalized — this table previously exposed only the follower-direction
+ * (`listFollowing`), with no counting capability either direction.
+ *
+ * NOTE (recorded, not fixed — DEC-044): `follows` only carries
+ * `idx_follows_follower (follower_id, created_at DESC)`. There is no index
+ * on `following_id`, so this query is a full table scan rather than the
+ * indexed lookup SPEC-007's "(indexed)" parenthetical implies. Inert at
+ * this project's seeded scale (~40 rows); not an unrequested index change
+ * to a DONE task's schema.
+ */
+export function countFollowers(db: MyrioDatabase, followingId: string): number {
+  return db.select().from(follows).where(eq(follows.followingId, followingId)).all().length;
+}
+
+/** The number of accounts `followerId` follows. Served by `idx_follows_follower`. */
+export function countFollowing(db: MyrioDatabase, followerId: string): number {
+  return db.select().from(follows).where(eq(follows.followerId, followerId)).all().length;
+}
