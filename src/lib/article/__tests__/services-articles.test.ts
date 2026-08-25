@@ -2,19 +2,19 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   createMigratedTestDb,
   type TestDb,
-} from '../../db/repositories/__tests__/helpers';
-import { createUser } from '../../db/repositories/users';
-import { createUpload } from '../../db/repositories/uploads';
-import { getOrCreateTag } from '../../db/repositories/tags';
-import { articleTags } from '../../db/schema';
-import { getArticleById } from '../../db/repositories/articles';
+} from '../../../server/db/repositories/__tests__/helpers';
+import { createUser } from '../../../server/db/repositories/users';
+import { createUpload } from '../../../server/db/repositories/uploads';
+import { getOrCreateTag } from '../../../server/db/repositories/tags';
+import { articleTags } from '../../../server/db/schema';
+import { getArticleById } from '../../../server/db/repositories/articles';
 import {
   createDraft,
   getDraftForAuthor,
   publishArticle,
   unpublishArticle,
   updateDraft,
-} from '../articles';
+} from '../../../server/services/articles';
 
 function doc(text: string) {
   return { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text }] }] };
