@@ -25,9 +25,13 @@ data/*.db-shm
 data/*.db-wal
 data/*.db-journal
 
-# Local uploads (runtime-written); seed corpus assets are tracked separately
+# Local uploads (runtime-written); seed corpus assets are tracked separately.
+# Un-ignore the seed/ directory node itself (and .gitkeep) so git still
+# recurses into them — a bare "!public/uploads/seed/photo.png" would not
+# work here because excluding the parent directory blocks recursion into it.
 public/uploads/*
 !public/uploads/.gitkeep
+!public/uploads/seed/
 
 # Env / secrets
 .env
