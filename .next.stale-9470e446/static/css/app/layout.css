@@ -1,0 +1,559 @@
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../myrio/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!../../../myrio/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/shell/AvatarMenu.module.css ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************/
+.AvatarMenu_wrapper__WsMJa {
+  position: relative;
+}
+
+.AvatarMenu_trigger__UTOfx {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  border: 0;
+  background: transparent;
+  padding: var(--s-1);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: var(--fg);
+}
+
+.AvatarMenu_trigger__UTOfx:hover {
+  background: var(--bg-subtle);
+}
+
+.AvatarMenu_trigger__UTOfx:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.AvatarMenu_avatar__Fjpeh {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: var(--fs-meta);
+  font-weight: 700;
+  object-fit: cover;
+}
+
+.AvatarMenu_menu__ymwXf {
+  position: absolute;
+  top: calc(100% + var(--s-2));
+  right: 0;
+  min-width: 180px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--s-2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 150;
+}
+
+.AvatarMenu_menuItem__T_nUO {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  cursor: pointer;
+}
+
+.AvatarMenu_menuItem__T_nUO:hover {
+  background: var(--bg-subtle);
+}
+
+.AvatarMenu_menuItem__T_nUO:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: -2px;
+}
+
+.AvatarMenu_divider__dEN7h {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: var(--s-2) 0;
+}
+
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../myrio/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!../../../myrio/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/shell/Footer.module.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************/
+.Footer_footer__4T_oq {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  margin-top: var(--s-8);
+  border-top: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-family: var(--font-ui);
+  font-size: var(--fs-meta);
+}
+
+.Footer_links__gjh_C {
+  display: flex;
+  gap: var(--s-4);
+}
+
+.Footer_links__gjh_C a {
+  color: var(--fg-muted);
+}
+
+.Footer_links__gjh_C a:hover {
+  color: var(--fg);
+}
+
+.Footer_links__gjh_C a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../myrio/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!../../../myrio/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/shell/IconBadgeLink.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************/
+.IconBadgeLink_wrapper__vQEKz {
+  position: relative;
+  display: inline-flex;
+}
+
+.IconBadgeLink_link__VNCnk {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.IconBadgeLink_link__VNCnk:hover {
+  background: var(--bg-subtle);
+}
+
+.IconBadgeLink_link__VNCnk:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.IconBadgeLink_badge__wib1f {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background: var(--danger);
+  color: var(--accent-fg);
+  font-family: var(--font-ui);
+  font-size: var(--fs-badge);
+  line-height: 16px;
+  text-align: center;
+}
+
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../myrio/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!../../../myrio/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/shell/SearchSlot.module.css ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*
+ * Search box ownership boundary (SPEC-009): the App Shell owns this slot's
+ * width and responsive behaviour only. The debounce, dropdown and API
+ * contract of the real search experience belong to the Search section
+ * (src/components/search/**, a later slice — out of scope here). This
+ * component is the shell-owned stand-in the header mounts today so every
+ * route already has a real, accessible search input; the Search slice
+ * later slots its own `<SearchBox />` into this same header position.
+ */
+
+.SearchSlot_field__Sde5_ {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  width: 100%;
+  max-width: 360px;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+}
+
+.SearchSlot_field__Sde5_:focus-within {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.SearchSlot_icon__sxSTP {
+  color: var(--fg-muted);
+  flex-shrink: 0;
+}
+
+.SearchSlot_input__HYvKd {
+  flex: 1 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  color: var(--fg);
+}
+
+.SearchSlot_input__HYvKd:focus {
+  outline: none;
+}
+
+.SearchSlot_input__HYvKd::placeholder {
+  color: var(--fg-muted);
+}
+
+.SearchSlot_desktopField___ZTRv {
+  display: none;
+}
+
+.SearchSlot_mobileTrigger__B_RKI {
+  display: inline-flex;
+}
+
+@media (min-width: 720px) {
+  .SearchSlot_desktopField___ZTRv {
+    display: flex;
+  }
+
+  .SearchSlot_mobileTrigger__B_RKI {
+    display: none;
+  }
+}
+
+.SearchSlot_mobileTrigger__B_RKI,
+.SearchSlot_overlayClose__vQ1nj {
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.SearchSlot_mobileTrigger__B_RKI:hover,
+.SearchSlot_overlayClose__vQ1nj:hover {
+  background: var(--bg-subtle);
+}
+
+.SearchSlot_mobileTrigger__B_RKI:focus-visible,
+.SearchSlot_overlayClose__vQ1nj:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.SearchSlot_overlay__gow4N {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.SearchSlot_overlay__gow4N .SearchSlot_field__Sde5_ {
+  max-width: none;
+}
+
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../myrio/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!../../../myrio/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/shell/Wordmark.module.css ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************/
+.Wordmark_wordmark__fjG1M {
+  font-family: var(--font-ui);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  color: var(--fg);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.Wordmark_wordmark__fjG1M:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../myrio/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!../../../myrio/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/shell/Header.module.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************/
+.Header_header__OyCYH {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  height: 64px;
+  padding: 0 var(--s-5);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.Header_searchArea__jeayF {
+  flex: 1 1;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.Header_actions__393tZ {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-shrink: 0;
+}
+
+.Header_writeLink__XpNGO {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  height: 40px;
+  padding: 0 var(--s-4);
+  border-radius: var(--radius-full);
+  color: var(--fg);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  white-space: nowrap;
+}
+
+.Header_writeLink__XpNGO:hover {
+  background: var(--bg-subtle);
+}
+
+.Header_writeLink__XpNGO:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.Header_writeLabel__MYmc6 {
+  display: none;
+}
+
+.Header_signedOutActions__GjJWV {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-shrink: 0;
+}
+
+.Header_signInLink__T3Ohn {
+  color: var(--fg);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.Header_signInLink__T3Ohn:hover {
+  background: var(--bg-subtle);
+}
+
+.Header_signInLink__T3Ohn:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.Header_getStartedLink__xRPjp {
+  color: var(--accent-fg);
+  background: var(--accent);
+  text-decoration: none;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.Header_getStartedLink__xRPjp:hover {
+  opacity: 0.9;
+}
+
+.Header_getStartedLink__xRPjp:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+@media (min-width: 720px) {
+  .Header_writeLabel__MYmc6 {
+    display: inline;
+  }
+}
+
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../myrio/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[2]!../../../myrio/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[5].use[3]!./src/components/shell/SkipLink.module.css ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************/
+.SkipLink_skipLink__g316n {
+  position: absolute;
+  top: var(--s-2);
+  left: var(--s-2);
+  z-index: 100;
+  transform: translateY(-200%);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: transform 0.15s ease-in-out;
+}
+
+.SkipLink_skipLink__g316n:focus-visible {
+  transform: translateY(0);
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../myrio/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[2]!../../../myrio/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[10].use[3]!./src/styles/tokens.css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************/
+/*
+ * Design tokens — myrio (SPEC-009).
+ *
+ * Single source of every colour, space, radius and type step. Components
+ * under src/components/** reference these via var(--...) only — never a raw
+ * hex literal or a hard-coded px font-size. That rule is enforced two ways:
+ * an ESLint no-restricted-syntax rule over src/components/**\/*.{ts,tsx,js,jsx}
+ * (.eslintrc.json), and a repo-wide grep over src/components/ in the
+ * acceptance gate. This file is the one place hex values are allowed to
+ * live, because it is the definition, not a use.
+ *
+ * Light theme only in v1. Everything lives under :root so a dark theme is
+ * later a token override, not a refactor.
+ */
+
+:root {
+  /* ---------------------------------------------------------------------
+   * Type scale (SPEC-009 table, values as given)
+   * ------------------------------------------------------------------- */
+  --fs-body: 20px; /* article body — set by article-content.css, owned elsewhere */
+  --fs-ui: 16px;
+  --fs-meta: 14px;
+  --fs-h1: 42px;
+  --fs-h2: 30px;
+  --fs-h3: 24px;
+
+  /* --fs-badge: not one of SPEC-009's named type-scale steps — added for the
+   * same reason --lh-ui/--font-ui/--radius-* below are: a real UI element
+   * (the notification/inbox count badge, a 16px circle) needs a size and
+   * none of the named steps fit inside it. --fs-meta (14px) is already
+   * cramped against a 16px line-height with zero margin for a two-digit
+   * count inside a circular badge, so this is a dedicated small step rather
+   * than overloading --fs-meta for a shape it wasn't sized for. */
+  --fs-badge: 11px;
+
+  /* Line-heights and UI font stack: not enumerated in SPEC-009's table, but
+   * required for any shell chrome to actually render text. Kept minimal and
+   * additive — does not touch article typography (article-content.css's
+   * territory). */
+  --lh-ui: 1.5;
+  --lh-heading: 1.25;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* ---------------------------------------------------------------------
+   * Measure
+   * ------------------------------------------------------------------- */
+  --measure: 680px;
+
+  /* ---------------------------------------------------------------------
+   * Space — 4px base, --s-1 (4px) .. --s-8 (64px)
+   * ------------------------------------------------------------------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+
+  /* ---------------------------------------------------------------------
+   * Radius — not enumerated by name in SPEC-009's table (it only names the
+   * token group); a small scale for controls, cards and pill/avatar shapes.
+   * ------------------------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-full: 999px;
+
+  /* ---------------------------------------------------------------------
+   * Colour
+   * ------------------------------------------------------------------- */
+  --bg: #ffffff;
+  --bg-subtle: #f6f5f3;
+  --fg: #1a1a1a;
+  --fg-muted: #595959; /* ~7:1 on --bg, clears the 4.5:1 body-text floor */
+  --accent: #1a8917; /* Medium-ish green, SPEC-009's fixed value */
+  --accent-fg: #ffffff; /* text/icon colour on an --accent background, ~4.53:1 */
+  --danger: #b91c1c;
+  --border: #d8d4cc;
+
+  /* Focus ring: --accent on --bg measures ~4.53:1, comfortably over the
+   * >= 3:1 non-text contrast floor SPEC-009 requires for focus indicators. */
+  --focus-ring-color: var(--accent);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+}
+
+/*
+ * Accessibility floor: prefers-reduced-motion disables all transitions and
+ * the clap animation (SPEC-009). This is the one global stylesheet in the
+ * App Shell's file scope that every route loads (via src/app/layout.tsx),
+ * so the reset lives here rather than being duplicated per component.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Visually-hidden utility: exposes a label to assistive tech without
+ * showing it on screen (e.g. an <input>'s associated <label> where the
+ * placeholder already carries the visible hint). Standard clip-based
+ * pattern; kept here for the same reason as the reduced-motion reset above
+ * — this is the one global stylesheet the App Shell's file scope owns.
+ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+

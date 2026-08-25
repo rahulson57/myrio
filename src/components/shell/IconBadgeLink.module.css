@@ -1,0 +1,40 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.link:hover {
+  background: var(--bg-subtle);
+}
+
+.link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background: var(--danger);
+  color: var(--accent-fg);
+  font-family: var(--font-ui);
+  font-size: var(--fs-badge);
+  line-height: 16px;
+  text-align: center;
+}
