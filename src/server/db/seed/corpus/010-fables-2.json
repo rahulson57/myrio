@@ -1,0 +1,270 @@
+{
+  "title": "The Hour Between Dog and Wolf",
+  "subtitle": "A short study in twilight",
+  "tags": [
+    "Philosophy",
+    "Poetry"
+  ],
+  "bodyJson": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "A short study in twilight"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The clockmaker's apprentice asked why the wrong clock was never fixed, and was told some lessons must run on schedule. The workshop's youngest apprentice asked more questions than the others combined, and was rarely told to stop. A river in flood forgives nothing and remembers everything, at least until the next flood."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A stone thrown into either river reaches the same sea, which the valley found more comforting than either river did. The last light in the house went out later that winter than in any winter before it. An unopened letter waits with a patience its writer rarely shared."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The fable ends, as fables do, before anyone involved has actually learned anything, which is left to the listener. The bakery's ovens stayed warm long after closing, heating the whole street a little further into the evening. A long-kept promise is worth more, if anything, for having been long-kept."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A candle argued with the dawn about which of them the room owed more to, and the room, wisely, said nothing. The harbor emptied of boats by storm warning and filled again, cautiously, the following noon. An old friend recognized across a crowded market is a small, entirely disproportionate joy."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The ferryman's fee was a story, not a coin, and he judged each one on whether it was true or merely tidy. The workshop's ledgers, taken together, told a quieter story than either the profits or the losses alone. A garden wall built by hand outlasts, as a rule, the hands that built it."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Two brothers split an orchard down the middle and spent the rest of their lives arguing over which half had the better light. Time moves at a different pace when there is work enough to fill it entirely. A room remembers its last occupant longer than most people expect."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The riddle's answer, once heard, seemed so obvious that every listener felt briefly foolish and permanently changed. The kettle took its usual three minutes, and in that time the whole morning seemed to settle. Distance is measured in more than miles once you have walked enough of it yourself."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A shepherd counted his flock by the shadows they threw, which worked well enough until the sun went behind a cloud. A garden left untended for a season still remembers, mostly, what it was planted to become. The clock in the hall ran two minutes fast for as long as anyone could remember, and no one corrected it."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The valley kept both rivers' names on its oldest map, out of a fairness the rivers themselves never managed. Patience is easier to recommend than to practise, a fact every teacher of it eventually admits. The correspondence between old friends thins with distance but rarely stops outright."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "What the wolf hour teaches, if it teaches anything, is that names are a convenience and not a law. A machine well maintained will forgive a great many small mistakes; one neglected forgives none. Quiet, in the right house, is not an absence of sound but a particular kind of company."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The clockmaker kept one clock permanently wrong, on the theory that a man should be reminded time is not obeyed but negotiated. The weather that season did exactly what the almanac predicted, which surprised everyone involved. A long walk clarifies more than a long conversation, in my limited experience of both."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Two rivers met at the edge of the valley and argued, in their fashion, about which of them the sea would remember. The light in late afternoon has a habit of making ordinary rooms look briefly important. Memory keeps the details it wants and discards the ones it decides, later, were never essential."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "There is an hour between dog and wolf, the old saying goes, when the light can no longer tell one from the other. A well-kept ledger tells you less about money than it does about the person who kept it. The city at that hour belonged mostly to delivery carts and the occasional insomniac."
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A traveller asked the ferryman which bank was better, and the ferryman said that was a question for the far bank, not him. Old letters, reread, always sound slightly more confident than the person who wrote them actually was. A door left ajar in an old house creaks in a key entirely its own."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The riddle was simple enough that only the clever refused to answer it, certain a simple thing could not be true. The harvest that year came in later than usual, and no less welcome for it. Silence between two people who know each other well is rarely uncomfortable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A fox and a heron shared a meal neither could eat from the other's dish, and neither thought to change the dish. The workshop light stayed on past midnight more nights than either of us cared to count. A path worn into a lawn tells you exactly where people actually wanted the path to be."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The parable does not say what became of the second river, only that the first one still speaks of it kindly. The sea keeps no calendar, which is either its great honesty or its great indifference. An old friend visiting after years away brings the past with them, uninvited but not unwelcome."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A miller ground the same grain his father ground and called it patience, though his son called it something else. The bread was better that winter, though no one could say exactly why. A long apprenticeship teaches humility faster than it teaches skill, and in the correct order."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The wolf hour passes quickly for those with somewhere to be, and slowly for everyone else. The train timetable was more aspiration than fact, and everyone along the line understood as much. A candle burns down evenly only if you trim the wick, a lesson repeated in every household."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "It is easy to mistake a closed door for a wall, the old teacher said, until someone shows you the handle. The orchard gave less fruit that year but of a better, denser sweetness. A stranger's kindness on a hard day is remembered longer than most kindnesses from family."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The wind off the water carried salt far enough inland to whiten the window glass by spring. A journal kept honestly becomes, without meaning to, a kind of second memory. The market emptied by four, leaving only the smell of what had been sold there."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "An old dog knows the sound of the right footsteps long before anyone else in the house does. The harvest moon that year hung low enough to seem, briefly, close. A debt repaid on time is remembered less than one repaid a day late."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The workshop smelled of sawdust and, faintly, of the coffee no one ever finished. A letter that arrives too late still says something true, even if the moment has passed. The garden wall held the day's heat long after the sun itself had gone down."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "An empty house is loud in a way a full one never manages to be. The apprentice years pass slowly at the time and quickly in the remembering. A well-worn tool fits the hand better than any new one, however well made."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "The evening train was always half empty, and always exactly on time. An old photograph tells you what a person looked like and almost nothing about who they were. The bakery opened before the rest of the street had decided the day had begun."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A long correspondence, kept up faithfully, is its own kind of small monument. The frost came early that year and stripped the orchard almost overnight. An honest account of a hard season reads, afterward, like a much easier one than it was."
+          }
+        ]
+      }
+    ]
+  },
+  "source": {
+    "work": "Fables of the Quiet Hour",
+    "author": "Josiah Pemberton",
+    "url": "https://archive.example.org/works/fables",
+    "license": "public-domain"
+  }
+}

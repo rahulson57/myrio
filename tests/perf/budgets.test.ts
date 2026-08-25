@@ -1,6 +1,8 @@
 import { existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { createTempDb } from '../setup/temp-db';
+import { seedTestDb } from '../setup/seed-fixtures';
 
 /**
  * Performance & size budgets (SPEC-001 "Governing Constraints — Runtime,
@@ -36,6 +38,8 @@ export const BUDGETS = {
   dbSeedMaxBytes: 100 * 1024 * 1024,
   /** First-load JS for `/@handle/:slug`, gzipped. */
   articleFirstLoadJsMaxBytes: 180 * 1024,
+  /** `seedTestDb(dbPath)` (SPEC-003 "Test fixtures"), p95 over RUNS runs. */
+  seedTestDbP95Ms: 300,
 } as const;
 
 const repoRoot = path.resolve(__dirname, '..', '..');
@@ -91,4 +95,31 @@ describe('performance & size budgets (SPEC-001)', () => {
   it.skip('article page server render stays within its p95 budget over the seeded corpus', () => {
     // Pending Feed & Read (S09): needs the article page route and seeded corpus.
   });
+
+  it(
+    'seedTestDb(dbPath) responds within its p95 budget over RUNS runs (Seed Data, S02)',
+    async () => {
+      const durationsMs: number[] = [];
+      for (let i = 0; i < RUNS; i += 1) {
+        const temp = await createTempDb();
+        try {
+          const start = performance.now();
+          const seeded = seedTestDb(temp.path);
+          durationsMs.push(performance.now() - start);
+          expect(seeded.summary.users).toBe(3);
+          expect(seeded.summary.articlesPublished).toBe(5);
+          expect(seeded.summary.articlesDraft).toBe(1);
+          seeded.close();
+        } finally {
+          await temp.cleanup();
+        }
+      }
+
+      const sorted = [...durationsMs].sort((a, b) => a - b);
+      const p95Index = Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.95) - 1);
+      const p95 = sorted[p95Index]!;
+      expect(p95, `p95 over ${RUNS} runs was ${p95.toFixed(1)}ms`).toBeLessThan(BUDGETS.seedTestDbP95Ms);
+    },
+    30_000,
+  );
 });

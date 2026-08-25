@@ -1,0 +1,59 @@
+{
+  "title": "The Instrument Case",
+  "subtitle": "An inheritance in brass",
+  "tags": [
+    "Travel",
+    "Adventure",
+    "Science"
+  ],
+  "bodyJson": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "An inheritance in brass"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "There are rivers on no map I have ever seen, not because no one has found them but because no one has agreed on their name. The instrument case held a theodolite older than either of us, its brass gone the colour of weak tea. We measured the coastline twice that season, and it disagreed with itself both times by the same stubborn margin."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A cartographer's daughter learns early that the map is not the country, only an argument in favour of one. Where the survey chain would not reach, my father estimated, and where he estimated, he wrote it plainly on the page. The ridge kept its own weather, sending down fog long after the valley below had cleared entirely."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "I have inherited the case, the instruments, and the habit of distrusting any coastline drawn too confidently. A new edge of the map is never blank so much as honest about what has not yet been walked."
+          }
+        ]
+      }
+    ]
+  },
+  "source": {
+    "work": "The Cartographer's Daughter",
+    "author": "Wilhelmina Croft",
+    "url": "https://archive.example.org/works/cartographer",
+    "license": "public-domain"
+  }
+}

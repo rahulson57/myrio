@@ -1,0 +1,52 @@
+{
+  "title": "Rumors from the Last Oasis",
+  "subtitle": null,
+  "tags": [
+    "Adventure",
+    "History",
+    "Travel"
+  ],
+  "bodyJson": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We traded cloth for water at the last oasis, a rate the merchant called fair and I called fortunate. The salt road does not forgive confidence, only preparation, and even then only some of the time. The salt flats took the light and threw it back doubled, until the horizon stopped meaning anything in particular."
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A caravan at dusk moves slower than it does at noon, as though the animals too feel the day loosening its grip. The well at the crossing was half remembered by every guide who claimed to know it, which worried me more than an honest no. Merchants kept their ledgers in a shorthand no customs officer ever fully cracked, and none of them explained why."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Rumour travelled faster across the flats than any caravan, arriving at the last oasis a full day ahead of us. The salt crust cracked under the camels' feet in a sound like distant, patient applause."
+          }
+        ]
+      }
+    ]
+  },
+  "source": {
+    "work": "The Salt Road Chronicles",
+    "author": "Augustus Rennick",
+    "url": "https://archive.example.org/works/saltroad",
+    "license": "public-domain"
+  }
+}

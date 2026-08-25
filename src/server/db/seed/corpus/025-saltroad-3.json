@@ -1,0 +1,59 @@
+{
+  "title": "The Merchant's Ledger",
+  "subtitle": "Three languages and a fourth, unspoken",
+  "tags": [
+    "Adventure",
+    "History",
+    "Travel"
+  ],
+  "bodyJson": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Three languages and a fourth, unspoken"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "I have crossed the salt road twice now, and both times arrived a slightly different person than the one who set out. A guide's reputation rests entirely on wells that are there when he says they will be, and nothing else. The flats at midday are silent in a way that presses on the ears, absence made almost audible."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "We traded cloth for water at the last oasis, a rate the merchant called fair and I called fortunate. The salt road does not forgive confidence, only preparation, and even then only some of the time. The salt flats took the light and threw it back doubled, until the horizon stopped meaning anything in particular."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A caravan at dusk moves slower than it does at noon, as though the animals too feel the day loosening its grip. The well at the crossing was half remembered by every guide who claimed to know it, which worried me more than an honest no."
+          }
+        ]
+      }
+    ]
+  },
+  "source": {
+    "work": "The Salt Road Chronicles",
+    "author": "Augustus Rennick",
+    "url": "https://archive.example.org/works/saltroad",
+    "license": "public-domain"
+  }
+}

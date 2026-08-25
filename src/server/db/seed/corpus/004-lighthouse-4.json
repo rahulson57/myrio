@@ -1,0 +1,51 @@
+{
+  "title": "The Storm Log",
+  "subtitle": null,
+  "tags": [
+    "Nature",
+    "Memoir"
+  ],
+  "bodyJson": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Storms here do not announce themselves; they simply arrive, the way grief arrives, mid-sentence. I learned to mend the winding gear myself, because the mainland was three hours away on a good sea. The keeper before the keeper before me carved his initials into the stair rail, and I have never sanded them out."
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "When the light held through a bad night I felt something close to pride, though pride is a poor word for it. The horizon at dusk turned the colour of a bruise healing, violet giving way to a tired green. I counted the ships that passed safely as another man might count blessings, which is to say I counted them at all."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "There is a ledger for the oil, a ledger for the weather, and no ledger at all for what the solitude costs. By April the ice had gone from the rocks and the birds came back as though nothing had happened."
+          }
+        ]
+      }
+    ]
+  },
+  "source": {
+    "work": "The Lighthouse Keeper's Journal",
+    "author": "Thomas Hollis Ward",
+    "url": "https://archive.example.org/works/lighthouse",
+    "license": "public-domain"
+  }
+}

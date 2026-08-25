@@ -1,0 +1,58 @@
+{
+  "title": "Letters Never Sent",
+  "subtitle": "Drafts found in the lamp room drawer",
+  "tags": [
+    "Nature",
+    "Memoir"
+  ],
+  "bodyJson": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Drafts found in the lamp room drawer"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "I have come to think of the tower less as a building than as a very patient argument against the dark. The gulls nested in the rock below and complained, as they always did, about everything at once. A letter came twice a month by the supply boat, and twice a month I read it standing at the rail."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Storms here do not announce themselves; they simply arrive, the way grief arrives, mid-sentence. I learned to mend the winding gear myself, because the mainland was three hours away on a good sea. The keeper before the keeper before me carved his initials into the stair rail, and I have never sanded them out."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "When the light held through a bad night I felt something close to pride, though pride is a poor word for it. The horizon at dusk turned the colour of a bruise healing, violet giving way to a tired green."
+          }
+        ]
+      }
+    ]
+  },
+  "source": {
+    "work": "The Lighthouse Keeper's Journal",
+    "author": "Thomas Hollis Ward",
+    "url": "https://archive.example.org/works/lighthouse",
+    "license": "public-domain"
+  }
+}

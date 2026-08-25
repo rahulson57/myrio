@@ -1,0 +1,52 @@
+{
+  "title": "Notes Toward a New Coastline",
+  "subtitle": null,
+  "tags": [
+    "Travel",
+    "Adventure",
+    "Science"
+  ],
+  "bodyJson": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "A cartographer's daughter learns early that the map is not the country, only an argument in favour of one. Where the survey chain would not reach, my father estimated, and where he estimated, he wrote it plainly on the page. The ridge kept its own weather, sending down fog long after the valley below had cleared entirely."
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "I have inherited the case, the instruments, and the habit of distrusting any coastline drawn too confidently. A new edge of the map is never blank so much as honest about what has not yet been walked. The eastern survey took eleven weeks and produced four pages, which my father considered a fair exchange."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Rivers move, he used to say, and so does the truth, and a good map only ever catches one of them resting. We named the smaller creek for my mother, since no one else had claimed it and she deserved a river."
+          }
+        ]
+      }
+    ]
+  },
+  "source": {
+    "work": "The Cartographer's Daughter",
+    "author": "Wilhelmina Croft",
+    "url": "https://archive.example.org/works/cartographer",
+    "license": "public-domain"
+  }
+}

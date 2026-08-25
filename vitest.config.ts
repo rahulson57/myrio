@@ -28,6 +28,12 @@ export default defineConfig({
       // Business logic coverage floor (SPEC-001): >= 70% lines over
       // src/lib/** and src/server/**, enforced by `vitest --coverage`.
       include: ['src/lib/**', 'src/server/**'],
+      // Vendored seed-corpus fixture data (SPEC-003 "Corpus source": text
+      // content, not code — see src/server/db/seed/corpus/*.json) isn't
+      // logic to cover; without this exclude the v8 provider reports each
+      // JSON file as 0% "lines" and drags the whole threshold down for
+      // files that were never meant to run any branches.
+      exclude: ['src/server/db/seed/corpus/**'],
       thresholds: {
         lines: 70,
         statements: 70,
