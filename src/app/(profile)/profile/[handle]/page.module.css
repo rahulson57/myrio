@@ -1,0 +1,158 @@
+/*
+ * Profile page (SPEC-007 "Profile"). Scoped to src/app/(profile)/ — not
+ * src/components/**, so the SPEC-009 raw-hex-color ESLint rule doesn't
+ * technically apply here, but every value still references a token from
+ * src/styles/tokens.css on purpose. No raw hex literals regardless.
+ */
+
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 var(--s-4) var(--s-8);
+}
+
+.cover {
+  width: 100%;
+  max-width: var(--measure);
+  height: auto;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-top: var(--s-5);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-4);
+  padding: var(--s-5) 0;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatarPlaceholder {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-full);
+  background: var(--bg-subtle);
+  color: var(--fg-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-h2);
+  font-family: var(--font-ui);
+  flex-shrink: 0;
+}
+
+.identity {
+  flex: 1;
+  min-width: 0;
+}
+
+.displayName {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-heading);
+  margin: 0;
+}
+
+.handle {
+  font-size: var(--fs-meta);
+  color: var(--fg-muted);
+  margin: var(--s-1) 0 0;
+}
+
+.bio {
+  font-size: var(--fs-ui);
+  color: var(--fg);
+  margin: var(--s-3) 0 0;
+  max-width: var(--measure);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-3);
+}
+
+.socialLink {
+  font-size: var(--fs-meta);
+  color: var(--accent);
+}
+
+.socialLink:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.counts {
+  display: flex;
+  gap: var(--s-5);
+  margin-top: var(--s-4);
+  font-size: var(--fs-meta);
+  color: var(--fg-muted);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--s-5);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--s-5);
+}
+
+.tab,
+.tabActive {
+  padding: var(--s-3) 0;
+  font-size: var(--fs-ui);
+  font-family: var(--font-ui);
+  color: var(--fg-muted);
+  border-bottom: 2px solid transparent;
+}
+
+.tabActive {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.tab:focus-visible,
+.tabActive:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.articleList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.articleList a {
+  font-size: var(--fs-h3);
+  color: var(--fg);
+}
+
+.articleList a:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.empty {
+  color: var(--fg-muted);
+  font-size: var(--fs-ui);
+}
+
+.about {
+  font-size: var(--fs-body);
+  color: var(--fg);
+  max-width: var(--measure);
+}
