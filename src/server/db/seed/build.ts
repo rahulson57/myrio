@@ -136,18 +136,46 @@ function writeUploadPng(
   };
 }
 
-/**
- * Full corpus seed (SPEC-003 volumes: 12 users, 28 published + 6 draft
- * articles, 12 tags, ~400 claps, ~90 comments, ~40 follows, 5
- * conversations/~40 messages, ~60 notifications, 24 uploads).
- */
-function seedFull(ctx: BuildContext): SeedSummary {
-  const tags = seedTags(ctx);
-  const users = seedUsers(ctx, SEED_USERS);
-  const authorHandles = SEED_USERS.filter((u) => u.role === 'author').map((u) => u.handle);
-  const allHandles = SEED_USERS.map((u) => u.handle);
+interface SeededArticle {
+  article: Article;
+  tagNames: string[];
+  status: 'draft' | 'published';
+}
 
-  // --- Uploads: one avatar per user (12) -------------------------------
+interface ArticleSeedResult {
+  articles: SeededArticle[];
+  publishedCount: number;
+  draftCount: number;
+  uploadCount: number;
+}
+
+interface SeededReply {
+  id: string;
+  articleId: string;
+  authorId: string;
+  parentAuthorId: string;
+}
+
+interface CommentSeedResult {
+  commentCount: number;
+  replyCount: number;
+  replies: SeededReply[];
+}
+
+interface ConversationRecord {
+  id: string;
+  a: User;
+  b: User;
+  recentMessageIds: string[];
+}
+
+interface ConversationSeedResult {
+  conversationRecords: ConversationRecord[];
+  messageCount: number;
+}
+
+/** Uploads: one avatar per user (12). */
+function seedAvatarUploads(ctx: BuildContext, users: Map<string, User>): number {
   let uploadCount = 0;
   SEED_USERS.forEach((spec, i) => {
     const png = writeUploadPng(ctx, `avatar-${spec.handle}.png`, 128, 128, initials(spec.displayName), i);
@@ -164,14 +192,22 @@ function seedFull(ctx: BuildContext): SeedSummary {
     });
     uploadCount += 1;
   });
+  return uploadCount;
+}
 
-  // --- Articles (+ 12 cover uploads for the first 12 published) --------
+/** Articles (+ 12 cover uploads for the first 12 published). */
+function seedArticlesWithCovers(
+  ctx: BuildContext,
+  users: Map<string, User>,
+  tags: Map<string, Tag>,
+): ArticleSeedResult {
   const corpus = loadCorpus();
   const manifestByTitle = new Map(ARTICLE_MANIFEST.map((m) => [m.title, m]));
-  const articles: { article: Article; tagNames: string[]; status: 'draft' | 'published' }[] = [];
+  const articles: SeededArticle[] = [];
   let publishedCount = 0;
   let draftCount = 0;
   let coversAssigned = 0;
+  let uploadCount = 0;
   const COVER_COUNT = 12;
 
   corpus.forEach((entry, i) => {
@@ -245,9 +281,20 @@ function seedFull(ctx: BuildContext): SeedSummary {
     else draftCount += 1;
   });
 
-  // --- Claps: every (article, user) pair, so the >= 400-row floor is ---
-  // --- reachable at all (12 users x 28 published articles = 336 < 400, --
-  // --- see TASK-019 proposal notes — drafts are included deliberately). -
+  return { articles, publishedCount, draftCount, uploadCount };
+}
+
+/**
+ * Claps: every (article, user) pair, so the >= 400-row floor is reachable
+ * at all (12 users x 28 published articles = 336 < 400, see TASK-019
+ * proposal notes — drafts are included deliberately).
+ */
+function seedClaps(
+  ctx: BuildContext,
+  articles: SeededArticle[],
+  allHandles: string[],
+  users: Map<string, User>,
+): number {
   let clapCount = 0;
   for (const { article } of articles) {
     allHandles.forEach((handle) => {
@@ -261,10 +308,17 @@ function seedFull(ctx: BuildContext): SeedSummary {
       clapCount += 1;
     });
   }
+  return clapCount;
+}
 
-  // --- Comments: top-level + single-depth replies (SPEC-002 depth rule) -
+/** Comments: top-level + single-depth replies (SPEC-002 depth rule). */
+function seedCommentsAndReplies(
+  ctx: BuildContext,
+  articles: SeededArticle[],
+  allHandles: string[],
+  users: Map<string, User>,
+): CommentSeedResult {
   let commentCount = 0;
-  let replyCount = 0;
   const topLevel: { id: string; articleId: string; authorId: string }[] = [];
   const published = articles.filter((a) => a.status === 'published');
   published.forEach(({ article }, i) => {
@@ -283,7 +337,9 @@ function seedFull(ctx: BuildContext): SeedSummary {
       topLevel.push({ id: comment.id, articleId: article.id, authorId: commenter.id });
     }
   });
-  const replies: { id: string; articleId: string; authorId: string; parentAuthorId: string }[] = [];
+
+  let replyCount = 0;
+  const replies: SeededReply[] = [];
   topLevel.slice(0, 32).forEach((parent, i) => {
     const replier = users.get(allHandles[(i + 5) % allHandles.length]!)!;
     const reply = createComment(ctx.db, {
@@ -298,7 +354,16 @@ function seedFull(ctx: BuildContext): SeedSummary {
     replies.push({ id: reply.id, articleId: parent.articleId, authorId: replier.id, parentAuthorId: parent.authorId });
   });
 
-  // --- Follows: >= 40, and june-alvarez follows all 10 authors (>= 5) --
+  return { commentCount, replyCount, replies };
+}
+
+/** Follows: >= 40, and june-alvarez follows all 10 authors (>= 5). */
+function seedFollows(
+  ctx: BuildContext,
+  users: Map<string, User>,
+  authorHandles: string[],
+  allHandles: string[],
+): number {
   let followCount = 0;
   const june = users.get('june-alvarez')!;
   authorHandles.forEach((handle) => {
@@ -316,8 +381,11 @@ function seedFull(ctx: BuildContext): SeedSummary {
         followCount += 1;
       }
     });
+  return followCount;
+}
 
-  // --- Conversations + messages: exactly 5 conversations, >= 40 messages
+/** Conversations + messages: exactly 5 conversations, >= 40 messages. */
+function seedConversationsAndMessages(ctx: BuildContext, users: Map<string, User>): ConversationSeedResult {
   const pairs: [string, string][] = [
     ['elena-marsh', 'cormac-reyes'],
     ['priya-nandan', 'declan-oshea'],
@@ -326,7 +394,7 @@ function seedFull(ctx: BuildContext): SeedSummary {
     ['greta-voss', 'ravi-chandran'],
   ];
   let messageCount = 0;
-  const conversationRecords: { id: string; a: User; b: User; recentMessageIds: string[] }[] = [];
+  const conversationRecords: ConversationRecord[] = [];
   pairs.forEach(([ha, hb]) => {
     const a = users.get(ha)!;
     const b = users.get(hb)!;
@@ -346,8 +414,20 @@ function seedFull(ctx: BuildContext): SeedSummary {
     }
     conversationRecords.push({ id: conversation.id, a, b, recentMessageIds });
   });
+  return { conversationRecords, messageCount };
+}
 
-  // --- Notifications: >= 60, mixed types, skipping self-actions --------
+/** Notifications: >= 60, mixed types, skipping self-actions. */
+function seedNotifications(
+  ctx: BuildContext,
+  articles: SeededArticle[],
+  allHandles: string[],
+  authorHandles: string[],
+  users: Map<string, User>,
+  june: User,
+  replies: SeededReply[],
+  conversationRecords: ConversationRecord[],
+): number {
   let notificationCount = 0;
   interface NotifyExtra {
     articleId?: string | null;
@@ -366,6 +446,8 @@ function seedFull(ctx: BuildContext): SeedSummary {
     });
     if (created) notificationCount += 1;
   };
+
+  const published = articles.filter((a) => a.status === 'published');
 
   const clapNotifyPairs: { articleAuthorId: string; actorId: string; articleId: string }[] = [];
   for (const { article } of articles) {
@@ -400,12 +482,51 @@ function seedFull(ctx: BuildContext): SeedSummary {
     });
   });
 
+  return notificationCount;
+}
+
+/**
+ * Full corpus seed (SPEC-003 volumes: 12 users, 28 published + 6 draft
+ * articles, 12 tags, ~400 claps, ~90 comments, ~40 follows, 5
+ * conversations/~40 messages, ~60 notifications, 24 uploads).
+ *
+ * Orchestrates the section-specific helpers above; each owns one entity
+ * family so no single function grows past a manageable size.
+ */
+function seedFull(ctx: BuildContext): SeedSummary {
+  const tags = seedTags(ctx);
+  const users = seedUsers(ctx, SEED_USERS);
+  const authorHandles = SEED_USERS.filter((u) => u.role === 'author').map((u) => u.handle);
+  const allHandles = SEED_USERS.map((u) => u.handle);
+
+  const avatarUploadCount = seedAvatarUploads(ctx, users);
+  const { articles, publishedCount, draftCount, uploadCount: coverUploadCount } = seedArticlesWithCovers(
+    ctx,
+    users,
+    tags,
+  );
+  const clapCount = seedClaps(ctx, articles, allHandles, users);
+  const { commentCount, replyCount, replies } = seedCommentsAndReplies(ctx, articles, allHandles, users);
+  const followCount = seedFollows(ctx, users, authorHandles, allHandles);
+  const { conversationRecords, messageCount } = seedConversationsAndMessages(ctx, users);
+  const june = users.get('june-alvarez')!;
+  const notificationCount = seedNotifications(
+    ctx,
+    articles,
+    allHandles,
+    authorHandles,
+    users,
+    june,
+    replies,
+    conversationRecords,
+  );
+
   return {
     users: users.size,
     tags: tags.size,
     articlesPublished: publishedCount,
     articlesDraft: draftCount,
-    uploads: uploadCount,
+    uploads: avatarUploadCount + coverUploadCount,
     claps: clapCount,
     comments: commentCount + replyCount,
     follows: followCount,
