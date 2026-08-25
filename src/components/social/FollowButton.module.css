@@ -1,0 +1,44 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 var(--s-4);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.button:hover {
+  background: var(--accent);
+  opacity: 0.9;
+}
+
+.button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.buttonFollowing {
+  background: var(--bg);
+  color: var(--fg);
+  border-color: var(--border);
+}
+
+.buttonFollowing:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.status {
+  margin-left: var(--s-2);
+  font-family: var(--font-ui);
+  font-size: var(--fs-meta);
+  color: var(--danger);
+}
